@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">VerticalViewPager</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="calibri">Calibri.ttf</string>
+    <string name="title_activity_home">HomeActivity</string>
+   <string name="apikey">e1b50bd22b79452e98344c808faa860d</string>
+</resources>
