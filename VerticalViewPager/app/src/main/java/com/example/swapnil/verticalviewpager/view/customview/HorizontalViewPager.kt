@@ -16,9 +16,9 @@ class HorizontalViewPager : ViewPager {
         return false
     }
 
-    override fun canScrollHorizontally(direction: Int): Boolean {
+    /*override fun canScrollHorizontally(direction: Int): Boolean {
         return false
-    }
+    }*/
 
 
 }

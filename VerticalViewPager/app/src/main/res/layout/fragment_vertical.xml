@@ -3,9 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.example.swapnil.verticalviewpager.view.customview.HorizontalViewPager
+    <com.example.swapnil.verticalviewpager.view.customview.VerticalViewPager
         android:id="@+id/nestedViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
 </RelativeLayout>

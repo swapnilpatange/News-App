@@ -4,5 +4,5 @@ class NewsResponse {
 
     val status: String = ""
     val totalResults: Int = 0
-    val articles: List<Articles> = emptyList()
+    val articles: ArrayList<Articles> = ArrayList()
 }

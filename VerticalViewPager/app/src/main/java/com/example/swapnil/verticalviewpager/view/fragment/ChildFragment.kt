@@ -11,6 +11,7 @@ import com.example.swapnil.verticalviewpager.R
 import com.example.swapnil.verticalviewpager.service.model.Articles
 import kotlinx.android.synthetic.main.fragment_child.view.*
 import com.bumptech.glide.request.RequestOptions
+import kotlinx.android.synthetic.main.fragment_vertical.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -31,15 +32,15 @@ class ChildFragment : Fragment() {
         // Inflate the layout for this fragment
         val rootview: View = inflater.inflate(R.layout.fragment_child, container, false)
         if (arguments!!.getBoolean("isWebView")) {
-            rootview.nestedScrollView.visibility = View.VISIBLE
+            //rootview.nestedScrollView.visibility = View.VISIBLE
             rootview.rl.visibility = View.GONE
             rootview.button.visibility = View.GONE
             rootview.txtDescription.visibility = View.GONE
 
-            rootview.webView.loadUrl((arguments!!.get("article") as Articles).url);
-            rootview.webView.webViewClient = WebViewClient()
+           /* rootview.webView.loadUrl((arguments!!.get("article") as Articles).url);
+            rootview.webView.webViewClient = WebViewClient()*/
         } else {
-            rootview.nestedScrollView.visibility = View.GONE
+            //rootview.nestedScrollView.visibility = View.GONE
             rootview.rl.visibility = View.VISIBLE
             rootview.txtDescription.visibility = View.VISIBLE
             rootview.button.visibility = View.VISIBLE
@@ -68,7 +69,7 @@ class ChildFragment : Fragment() {
         fun newInstance(article: Articles, iswebView: Boolean) =
                 ChildFragment().apply {
                     arguments = Bundle().apply {
-                        putSerializable("article", article)
+                        putParcelable("article", article)
                         putBoolean("isWebView", iswebView)
                     }
                 }

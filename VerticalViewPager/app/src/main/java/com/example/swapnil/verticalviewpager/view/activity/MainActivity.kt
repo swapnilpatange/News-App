@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.view.ViewPager
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.MotionEvent
@@ -13,11 +14,27 @@ import com.example.swapnil.verticalviewpager.service.model.NewsResponse
 import com.example.swapnil.verticalviewpager.view.fragment.VerticalFragment
 import com.example.swapnil.verticalviewpager.view.adapter.VerticalViewPagerAdapter
 import com.example.swapnil.verticalviewpager.viewmodel.AndroidViewModel
+import kotlinx.android.synthetic.main.fragment_vertical.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class MainActivity : AppCompatActivity(), VerticalFragment.ToggleVerticalViewPagerScrolling {
+class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
+    override fun onPageScrollStateChanged(p0: Int) {
+
+    }
+
+    override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
+
+    }
+
+    override fun onPageSelected(position: Int) {
+        if (position == 1) {
+            // (verticalViewPager.adapter as VerticalViewPagerAdapter).getItem(0).
+            //(verticalViewPager.adapter.getItemPosition()getitcurrentItem as VerticalFragment).loadUrl((verticalViewPager.currentItem as VerticalFragment).rootView!!.nestedViewPager.currentItem)
+            ((verticalViewPager.adapter as VerticalViewPagerAdapter).getFragment(1) as VerticalFragment).loadUrl(((verticalViewPager.adapter as VerticalViewPagerAdapter).getFragment(0) as VerticalFragment).rootView!!.nestedViewPager.currentItem)
+        }
+    }
 
     var apiKey: String = ""
 
@@ -27,9 +44,9 @@ class MainActivity : AppCompatActivity(), VerticalFragment.ToggleVerticalViewPag
         apiKey = resources.getString(R.string.apikey)
         val country: String = "in"
         if (intent.getBooleanExtra("isTrending", false))
-            getTrendingNews(country,apiKey)
+            getTrendingNews(country, apiKey)
         else
-            getNews(intent.getStringExtra("categoryName"),apiKey)
+            getNews(intent.getStringExtra("categoryName"), apiKey)
 
     }
 
@@ -37,19 +54,20 @@ class MainActivity : AppCompatActivity(), VerticalFragment.ToggleVerticalViewPag
         val simpleDateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
         val date: String = simpleDateFormat.format(Date())
         val mAndroidViewModel = ViewModelProviders.of(this@MainActivity).get(AndroidViewModel::class.java)
-        mAndroidViewModel.getNewsByCategory(categoryName!!, date,apiKey)?.observe(this, Observer<NewsResponse> { newsResponse ->
+        mAndroidViewModel.getNewsByCategory(categoryName!!, date, apiKey)?.observe(this, Observer<NewsResponse> { newsResponse ->
             Log.d("", "")
             if (newsResponse!!.status.equals("ok")) {
                 val verticalPagerAdapter: VerticalViewPagerAdapter = VerticalViewPagerAdapter(supportFragmentManager, newsResponse!!.articles)
                 verticalViewPager.adapter = verticalPagerAdapter
+                verticalViewPager.addOnPageChangeListener(this)
             }
         })
 
     }
 
-    private fun getTrendingNews(country:String,apiKey: String) {
+    private fun getTrendingNews(country: String, apiKey: String) {
         val mAndroidViewModel = ViewModelProviders.of(this@MainActivity).get(AndroidViewModel::class.java)
-        mAndroidViewModel.getTrending(country,apiKey)?.observe(this, Observer<NewsResponse> { newsResponse ->
+        mAndroidViewModel.getTrending(country, apiKey)?.observe(this, Observer<NewsResponse> { newsResponse ->
             if (newsResponse!!.status.equals("ok")) {
                 val verticalPagerAdapter: VerticalViewPagerAdapter = VerticalViewPagerAdapter(supportFragmentManager, newsResponse!!.articles)
                 verticalViewPager.adapter = verticalPagerAdapter
@@ -57,19 +75,25 @@ class MainActivity : AppCompatActivity(), VerticalFragment.ToggleVerticalViewPag
         })
     }
 
-    override fun trigger(page: Int) {
-        if (page == 1) {
-            verticalViewPager.setOnTouchListener(object : View.OnTouchListener {
-                override fun onTouch(v: View, event: MotionEvent): Boolean {
-                    return true
-                }
-            })
-        } else {
-            verticalViewPager.setOnTouchListener(object : View.OnTouchListener {
-                override fun onTouch(v: View, event: MotionEvent): Boolean {
-                    return false
-                }
-            })
-        }
+    override fun onBackPressed() {
+        if (verticalViewPager.currentItem == 0)
+            super.onBackPressed()
+        else
+            verticalViewPager.currentItem = 0
     }
+    /* override fun trigger(page: Int) {
+         if (page == 1) {
+             verticalViewPager.setOnTouchListener(object : View.OnTouchListener {
+                 override fun onTouch(v: View, event: MotionEvent): Boolean {
+                     return true
+                 }
+             })
+         } else {
+             verticalViewPager.setOnTouchListener(object : View.OnTouchListener {
+                 override fun onTouch(v: View, event: MotionEvent): Boolean {
+                     return false
+                 }
+             })
+         }
+     }*/
 }
